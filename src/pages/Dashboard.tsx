@@ -220,57 +220,57 @@ export default function Dashboard() {
   // Not Sunday - show countdown and current week
   if (!sundayState) {
     return (
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-black mb-4">
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="text-center mb-6 md:mb-12">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-black mb-2 md:mb-4">
             <span className="neon-text">🎰 COUPLES CASINO 🎰</span>
           </h1>
-          <p className="text-xl text-purple-300">
+          <p className="text-base md:text-xl text-purple-300">
             Welcome back, <span className="text-yellow-400 font-bold">{user?.name}</span>! 
           </p>
-          <p className="text-purple-400">
+          <p className="text-sm md:text-base text-purple-400">
             Playing with <span className="text-pink-400 font-bold">{partner?.name}</span> 💕
           </p>
         </div>
 
         <CountdownTimer />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-          <Link to="/current" className="card-neon hover:scale-105 transition-transform group block">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-6 md:mt-8">
+          <Link to="/current" className="card-neon hover:scale-[1.02] md:hover:scale-105 transition-transform group block">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-xl font-bold text-yellow-400 group-hover:glow-gold">🎯 Current Challenge</h3>
-              <span className="text-4xl animate-float">🎪</span>
+              <h3 className="text-lg md:text-xl font-bold text-yellow-400 group-hover:glow-gold">🎯 Current Challenge</h3>
+              <span className="text-3xl md:text-4xl animate-float">🎪</span>
             </div>
-            <p className="text-gray-400">View your active mission</p>
+            <p className="text-sm md:text-base text-gray-400">View your active mission</p>
           </Link>
 
-          <Link to="/tasks" className="card-neon hover:scale-105 transition-transform group block">
+          <Link to="/tasks" className="card-neon hover:scale-[1.02] md:hover:scale-105 transition-transform group block">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-xl font-bold text-pink-400 group-hover:glow-purple">📝 Task Pool</h3>
-              <span className="text-4xl animate-float" style={{animationDelay: '0.5s'}}>🎲</span>
+              <h3 className="text-lg md:text-xl font-bold text-pink-400 group-hover:glow-purple">📝 Task Pool</h3>
+              <span className="text-3xl md:text-4xl animate-float" style={{animationDelay: '0.5s'}}>🎲</span>
             </div>
-            <p className="text-gray-400">Create challenges for {partner?.name}</p>
+            <p className="text-sm md:text-base text-gray-400">Create challenges for {partner?.name}</p>
           </Link>
         </div>
 
-        <div className="card mt-8 text-center">
-          <h3 className="text-lg font-bold text-yellow-400 mb-4">🎰 How To Play</h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-            <div className="bg-slate-800/50 rounded-xl p-4">
-              <div className="text-3xl mb-2">📝</div>
-              <p className="text-gray-300">Create fun challenges</p>
+        <div className="card mt-6 md:mt-8 text-center">
+          <h3 className="text-base md:text-lg font-bold text-yellow-400 mb-4">🎰 How To Play</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 text-sm">
+            <div className="bg-slate-800/50 rounded-xl p-3 md:p-4">
+              <div className="text-2xl md:text-3xl mb-1 md:mb-2">📝</div>
+              <p className="text-gray-300 text-xs md:text-sm">Create fun challenges</p>
             </div>
-            <div className="bg-slate-800/50 rounded-xl p-4">
-              <div className="text-3xl mb-2">🎡</div>
-              <p className="text-gray-300">Spin Sunday @ 11PM</p>
+            <div className="bg-slate-800/50 rounded-xl p-3 md:p-4">
+              <div className="text-2xl md:text-3xl mb-1 md:mb-2">🎡</div>
+              <p className="text-gray-300 text-xs md:text-sm">Spin Sunday @ 11PM</p>
             </div>
-            <div className="bg-slate-800/50 rounded-xl p-4">
-              <div className="text-3xl mb-2">✅</div>
-              <p className="text-gray-300">Complete your task</p>
+            <div className="bg-slate-800/50 rounded-xl p-3 md:p-4">
+              <div className="text-2xl md:text-3xl mb-1 md:mb-2">✅</div>
+              <p className="text-gray-300 text-xs md:text-sm">Complete your task</p>
             </div>
-            <div className="bg-slate-800/50 rounded-xl p-4">
-              <div className="text-3xl mb-2">🏆</div>
-              <p className="text-gray-300">Verify & celebrate!</p>
+            <div className="bg-slate-800/50 rounded-xl p-3 md:p-4">
+              <div className="text-2xl md:text-3xl mb-1 md:mb-2">🏆</div>
+              <p className="text-gray-300 text-xs md:text-sm">Verify & celebrate!</p>
             </div>
           </div>
         </div>
