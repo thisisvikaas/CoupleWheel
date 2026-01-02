@@ -96,6 +96,23 @@ export const authService = {
 
       if (userError) throw userError;
 
+      // If user profile doesn't exist, create it now
+      if (!userData) {
+        console.log('User profile missing, creating now...');
+        const { data: newUser, error: createError } = await supabase
+          .from('users')
+          .insert({
+            id: authData.user.id,
+            name: authData.user.user_metadata?.name || 'User',
+            email: authData.user.email!,
+          })
+          .select()
+          .maybeSingle();
+
+        if (createError) throw createError;
+        return { user: newUser, error: null };
+      }
+
       return { user: userData, error: null };
     } catch (error) {
       return { user: null, error: error as Error };

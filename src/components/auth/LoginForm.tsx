@@ -8,18 +8,28 @@ export default function LoginForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [info, setInfo] = useState('');
   const navigate = useNavigate();
   const { setUser } = useAuthStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setInfo('');
     setLoading(true);
 
     const { user, error: loginError } = await authService.login(email, password);
 
     if (loginError) {
-      setError(loginError.message);
+      // Provide more helpful error messages
+      if (loginError.message.includes('Email not confirmed')) {
+        setInfo('Please check your email and click the confirmation link before logging in.');
+        setError('Email not confirmed yet');
+      } else if (loginError.message.includes('Invalid login credentials')) {
+        setError('Invalid email or password. Please check and try again.');
+      } else {
+        setError(loginError.message);
+      }
       setLoading(false);
       return;
     }
@@ -27,6 +37,8 @@ export default function LoginForm() {
     if (user) {
       setUser(user);
       navigate('/');
+    } else {
+      setError('Login failed. Please try again.');
     }
 
     setLoading(false);
@@ -47,6 +59,12 @@ export default function LoginForm() {
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
                 {error}
+              </div>
+            )}
+
+            {info && (
+              <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg text-sm">
+                {info}
               </div>
             )}
 
