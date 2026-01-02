@@ -70,8 +70,7 @@ CREATE POLICY "Users can view their own profile and their partner's profile"
   ON public.users FOR SELECT
   USING (
     auth.uid() = id OR 
-    auth.uid() = partner_id OR
-    id IN (SELECT partner_id FROM public.users WHERE id = auth.uid())
+    auth.uid() = partner_id
   );
 
 CREATE POLICY "Users can update their own profile"
