@@ -2,6 +2,7 @@ import useCurrentSpin from '@/hooks/useCurrentSpin';
 import { useAuthStore } from '@/store/authStore';
 import VetoButton from '@/components/veto/VetoButton';
 import CategoryTag from '@/components/tasks/CategoryTag';
+import CountdownTimer from '@/components/countdown/CountdownTimer';
 
 export default function CurrentWeek() {
   const { user, partner } = useAuthStore();
@@ -33,6 +34,17 @@ export default function CurrentWeek() {
   if (!currentWeek) {
     return (
       <div className="max-w-2xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-black mb-2">
+            <span className="neon-text">🎯 CHALLENGE 🎯</span>
+          </h1>
+        </div>
+        
+        {/* Always show countdown */}
+        <div className="mb-6">
+          <CountdownTimer />
+        </div>
+
         <div className="card-gold text-center animate-pulse-glow">
           <div className="text-6xl mb-4 animate-float">🎡</div>
           <h2 className="text-2xl font-bold text-yellow-400 glow-gold mb-4">No Active Challenge</h2>
@@ -46,15 +58,15 @@ export default function CurrentWeek() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="text-center mb-8">
+      <div className="text-center mb-6">
         <h1 className="text-4xl font-black mb-2">
           <span className="neon-text">🎯 THIS WEEK'S CHALLENGE 🎯</span>
         </h1>
-        <p className="text-purple-300">
-          {currentWeek.daysRemaining > 0
-            ? `⏰ ${currentWeek.daysRemaining} day${currentWeek.daysRemaining !== 1 ? 's' : ''} remaining`
-            : '🔥 Final day! Make it count!'}
-        </p>
+      </div>
+
+      {/* Always show countdown to next spin */}
+      <div className="mb-6 flex justify-center">
+        <CountdownTimer variant="compact" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -73,10 +85,15 @@ export default function CurrentWeek() {
             <CategoryTag category={currentWeek.myTask.category} />
           )}
 
-          <div className="mt-4 pt-4 border-t border-yellow-500/30">
+          <div className="mt-4 pt-4 border-t border-yellow-500/30 flex justify-between items-center">
             <p className="text-sm text-gray-400">
               Created by: <span className="text-pink-400 font-bold">{currentWeek.myTaskAssignedTo}</span>
             </p>
+            <span className={`text-sm font-bold ${currentWeek.daysRemaining > 3 ? 'text-green-400' : currentWeek.daysRemaining > 1 ? 'text-yellow-400' : 'text-red-400'}`}>
+              {currentWeek.daysRemaining > 0
+                ? `${currentWeek.daysRemaining}d left`
+                : '🔥 Last day!'}
+            </span>
           </div>
         </div>
 

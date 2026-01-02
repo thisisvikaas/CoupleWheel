@@ -1,5 +1,5 @@
 /* Casino Game Theme */
-@import url('https://fonts.googleapis.com/css2?family=Russo+One&family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,7 +8,7 @@
 @layer base {
   body {
     @apply bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white min-h-screen;
-    font-family: 'Orbitron', sans-serif;
+    font-family: 'Exo 2', sans-serif;
   }
 }
 
@@ -124,8 +124,8 @@
 
 /* Slot machine number style */
 .slot-number {
-  font-family: 'Press Start 2P', cursive;
-  @apply text-4xl font-bold text-yellow-400 drop-shadow-lg;
+  font-family: 'Exo 2', sans-serif;
+  @apply text-4xl font-black text-yellow-400 drop-shadow-lg;
   text-shadow: 0 0 10px rgba(234, 179, 8, 0.8), 2px 2px 0 #000;
 }
 
