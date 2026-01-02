@@ -40,13 +40,13 @@ export default function VetoButton({
 
   if (!vetoAvailable) {
     return (
-      <div className="card bg-gray-50 border border-gray-300">
+      <div className="card bg-slate-800/50 border border-gray-700">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-semibold text-gray-700">Veto Power</h3>
+            <h3 className="font-bold text-gray-500">🚫 Veto Power</h3>
             <p className="text-sm text-gray-600">Used this month</p>
           </div>
-          <div className="text-3xl opacity-50">🚫</div>
+          <div className="text-4xl opacity-30">🔒</div>
         </div>
       </div>
     );
@@ -54,53 +54,60 @@ export default function VetoButton({
 
   if (showConfirm) {
     return (
-      <div className="card bg-orange-50 border-2 border-orange-300">
+      <div className="card-neon border-2 border-orange-500/50">
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded mb-3 text-sm">
-            {error}
+          <div className="bg-red-900/50 border border-red-500/50 text-red-300 px-3 py-2 rounded-xl mb-3 text-sm">
+            ❌ {error}
           </div>
         )}
         
-        <h3 className="font-semibold mb-2">Use Your Veto?</h3>
-        <p className="text-sm text-gray-700 mb-4">
-          This will swap the task assignments. You'll get your partner's current task, and
-          they'll get yours. You can only veto once per month!
-        </p>
-        <div className="flex space-x-2">
-          <button
-            onClick={handleVeto}
-            disabled={loading}
-            className="flex-1 bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50"
-          >
-            {loading ? 'Processing...' : 'Yes, Use Veto'}
-          </button>
-          <button
-            onClick={() => setShowConfirm(false)}
-            disabled={loading}
-            className="flex-1 btn-secondary"
-          >
-            Cancel
-          </button>
+        <div className="flex items-start gap-4">
+          <div className="text-4xl">⚠️</div>
+          <div className="flex-1">
+            <h3 className="font-bold text-orange-400 text-lg mb-2">Use Your Veto?</h3>
+            <p className="text-sm text-gray-300 mb-4">
+              This will <span className="text-yellow-400 font-bold">swap challenges</span> with your partner. 
+              You'll get their current challenge and they'll get yours.
+              <br /><br />
+              <span className="text-orange-400">⚡ You can only veto ONCE per month!</span>
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={handleVeto}
+                disabled={loading}
+                className="btn-danger flex-1"
+              >
+                {loading ? '⏳ Processing...' : '🔄 YES, SWAP CHALLENGES'}
+              </button>
+              <button
+                onClick={() => setShowConfirm(false)}
+                disabled={loading}
+                className="btn-secondary flex-1"
+              >
+                ❌ Cancel
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="card bg-orange-50 border-2 border-orange-300 hover:shadow-lg transition-shadow">
+    <div className="card bg-gradient-to-r from-orange-900/30 to-red-900/30 border-2 border-orange-500/50 hover:border-orange-400/70 transition-all cursor-pointer group"
+         onClick={() => setShowConfirm(true)}>
       <div className="flex items-center justify-between">
-        <div className="flex-1">
-          <h3 className="font-semibold text-orange-800">Veto Power Available</h3>
-          <p className="text-sm text-orange-700">Swap tasks (1 per month)</p>
+        <div className="flex items-center gap-4">
+          <div className="text-4xl group-hover:animate-bounce">🔄</div>
+          <div>
+            <h3 className="font-bold text-orange-400 text-lg">Veto Power Available!</h3>
+            <p className="text-sm text-gray-400">Swap challenges with your partner (1x per month)</p>
+          </div>
         </div>
-        <button
-          onClick={() => setShowConfirm(true)}
-          className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
-        >
-          Use Veto 🔄
+        <button className="btn-danger">
+          USE VETO 🎲
         </button>
       </div>
     </div>
   );
 }
-

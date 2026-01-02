@@ -9,8 +9,12 @@ export default function CurrentWeek() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+      <div className="flex flex-col items-center justify-center py-20">
+        <div className="relative">
+          <div className="w-20 h-20 border-4 border-yellow-500/30 rounded-full"></div>
+          <div className="w-20 h-20 border-4 border-t-yellow-400 rounded-full animate-spin absolute top-0 left-0"></div>
+        </div>
+        <p className="mt-6 text-yellow-400 font-bold text-lg animate-pulse">Loading Challenge...</p>
       </div>
     );
   }
@@ -18,8 +22,9 @@ export default function CurrentWeek() {
   if (error) {
     return (
       <div className="max-w-2xl mx-auto">
-        <div className="card bg-red-50 border border-red-200">
-          <p className="text-red-700">{error}</p>
+        <div className="card-neon text-center">
+          <div className="text-6xl mb-4">❌</div>
+          <p className="text-red-400">{error}</p>
         </div>
       </div>
     );
@@ -28,12 +33,11 @@ export default function CurrentWeek() {
   if (!currentWeek) {
     return (
       <div className="max-w-2xl mx-auto">
-        <div className="card text-center">
-          <div className="text-6xl mb-4">📅</div>
-          <h2 className="text-2xl font-bold mb-2">No Active Tasks</h2>
-          <p className="text-gray-600">
-            Wait until Sunday at 11:00 PM to spin the wheel and get your tasks for next
-            week!
+        <div className="card-gold text-center animate-pulse-glow">
+          <div className="text-6xl mb-4 animate-float">🎡</div>
+          <h2 className="text-2xl font-bold text-yellow-400 glow-gold mb-4">No Active Challenge</h2>
+          <p className="text-gray-300">
+            Spin the wheel on Sunday at 11:00 PM to get your weekly challenge!
           </p>
         </div>
       </div>
@@ -42,59 +46,58 @@ export default function CurrentWeek() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">This Week's Challenge</h1>
-        <p className="text-gray-600">
+      <div className="text-center mb-8">
+        <h1 className="text-4xl font-black mb-2">
+          <span className="neon-text">🎯 THIS WEEK'S CHALLENGE 🎯</span>
+        </h1>
+        <p className="text-purple-300">
           {currentWeek.daysRemaining > 0
-            ? `${currentWeek.daysRemaining} day${
-                currentWeek.daysRemaining !== 1 ? 's' : ''
-              } remaining until next spin`
-            : 'Last day! Verification starts Sunday.'}
+            ? `⏰ ${currentWeek.daysRemaining} day${currentWeek.daysRemaining !== 1 ? 's' : ''} remaining`
+            : '🔥 Final day! Make it count!'}
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        {/* Your Task */}
-        <div className="card bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-300">
-          <div className="flex items-start justify-between mb-3">
-            <h2 className="text-xl font-bold text-purple-800">Your Challenge</h2>
-            <div className="text-3xl">🎯</div>
+        {/* Your Challenge */}
+        <div className="card-gold animate-pulse-glow">
+          <div className="flex items-start justify-between mb-4">
+            <h2 className="text-xl font-bold text-yellow-400 glow-gold">🎯 YOUR MISSION</h2>
+            <div className="text-4xl animate-float">🏆</div>
           </div>
           
-          <div className="mb-4">
-            <p className="text-gray-800 text-lg mb-2">{currentWeek.myTask.text}</p>
-            {currentWeek.myTask.category && (
-              <CategoryTag category={currentWeek.myTask.category} />
-            )}
+          <div className="bg-slate-900/50 rounded-xl p-4 mb-4">
+            <p className="text-white text-lg leading-relaxed">{currentWeek.myTask.text}</p>
           </div>
 
-          <div className="mt-4 pt-4 border-t border-purple-200">
-            <p className="text-sm text-gray-600">
-              <span className="font-medium">Created by:</span> {currentWeek.myTaskAssignedTo}
+          {currentWeek.myTask.category && (
+            <CategoryTag category={currentWeek.myTask.category} />
+          )}
+
+          <div className="mt-4 pt-4 border-t border-yellow-500/30">
+            <p className="text-sm text-gray-400">
+              Created by: <span className="text-pink-400 font-bold">{currentWeek.myTaskAssignedTo}</span>
             </p>
           </div>
         </div>
 
-        {/* Partner's Task */}
-        <div className="card bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-300">
-          <div className="flex items-start justify-between mb-3">
-            <h2 className="text-xl font-bold text-blue-800">
-              {partner?.name}'s Challenge
-            </h2>
-            <div className="text-3xl">👀</div>
+        {/* Partner's Challenge */}
+        <div className="card-neon">
+          <div className="flex items-start justify-between mb-4">
+            <h2 className="text-xl font-bold text-pink-400">💕 {partner?.name}'s MISSION</h2>
+            <div className="text-4xl animate-float" style={{ animationDelay: '0.5s' }}>👀</div>
           </div>
           
-          <div className="mb-4">
-            <p className="text-gray-800 text-lg mb-2">{currentWeek.partnerTask.text}</p>
-            {currentWeek.partnerTask.category && (
-              <CategoryTag category={currentWeek.partnerTask.category} />
-            )}
+          <div className="bg-slate-900/50 rounded-xl p-4 mb-4">
+            <p className="text-gray-300 text-lg leading-relaxed">{currentWeek.partnerTask.text}</p>
           </div>
 
-          <div className="mt-4 pt-4 border-t border-blue-200">
-            <p className="text-sm text-gray-600">
-              <span className="font-medium">Created by:</span>{' '}
-              {currentWeek.partnerTaskAssignedTo}
+          {currentWeek.partnerTask.category && (
+            <CategoryTag category={currentWeek.partnerTask.category} />
+          )}
+
+          <div className="mt-4 pt-4 border-t border-pink-500/30">
+            <p className="text-sm text-gray-400">
+              Created by: <span className="text-yellow-400 font-bold">{currentWeek.partnerTaskAssignedTo}</span>
             </p>
           </div>
         </div>
@@ -110,33 +113,28 @@ export default function CurrentWeek() {
         />
       )}
 
-      {/* Progress Info */}
-      <div className="card mt-6 bg-gray-50">
-        <h3 className="font-semibold mb-3">How It Works</h3>
-        <ul className="space-y-2 text-sm text-gray-700">
-          <li className="flex items-start">
-            <span className="mr-2">📝</span>
-            <span>Complete your task anytime during the week</span>
-          </li>
-          <li className="flex items-start">
-            <span className="mr-2">✅</span>
-            <span>
-              On Sunday, verify if your partner completed their task (be honest!)
-            </span>
-          </li>
-          <li className="flex items-start">
-            <span className="mr-2">🎡</span>
-            <span>After 11:00 PM Sunday, spin the wheel for next week's tasks</span>
-          </li>
-          <li className="flex items-start">
-            <span className="mr-2">🔄</span>
-            <span>
-              Use your veto power (1 per month) to swap tasks if you really need to
-            </span>
-          </li>
-        </ul>
+      {/* How It Works */}
+      <div className="card mt-6">
+        <h3 className="text-lg font-bold text-yellow-400 mb-4">🎰 How To Win</h3>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="bg-slate-800/50 rounded-xl p-4 text-center">
+            <div className="text-3xl mb-2">📝</div>
+            <p className="text-gray-300 text-sm">Complete your challenge</p>
+          </div>
+          <div className="bg-slate-800/50 rounded-xl p-4 text-center">
+            <div className="text-3xl mb-2">📸</div>
+            <p className="text-gray-300 text-sm">Document the fun</p>
+          </div>
+          <div className="bg-slate-800/50 rounded-xl p-4 text-center">
+            <div className="text-3xl mb-2">✅</div>
+            <p className="text-gray-300 text-sm">Get verified Sunday</p>
+          </div>
+          <div className="bg-slate-800/50 rounded-xl p-4 text-center">
+            <div className="text-3xl mb-2">🏆</div>
+            <p className="text-gray-300 text-sm">Celebrate together!</p>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-

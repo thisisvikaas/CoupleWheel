@@ -62,62 +62,45 @@ export default function VerificationPanel({
 
   if (hasVerified) {
     return (
-      <div className="card max-w-2xl mx-auto">
-        <h2 className="text-2xl font-bold text-center mb-6">Last Week's Tasks</h2>
+      <div className="card-gold max-w-2xl mx-auto">
+        <h2 className="text-2xl font-bold text-center text-yellow-400 glow-gold mb-6">
+          ✅ Last Week's Challenges
+        </h2>
         
         <div className="space-y-4 mb-6">
-          <div className="card bg-blue-50 border border-blue-200">
-            <h3 className="font-semibold mb-2">Your Task:</h3>
-            <p className="text-gray-800">{userTask.text}</p>
+          <div className="bg-slate-900/50 rounded-xl p-4 border border-blue-500/30">
+            <h3 className="font-bold text-blue-400 mb-2">Your Challenge Was:</h3>
+            <p className="text-gray-200">{userTask.text}</p>
           </div>
 
-          <div className="card bg-purple-50 border border-purple-200">
-            <h3 className="font-semibold mb-2">{partnerName}'s Task:</h3>
-            <p className="text-gray-800">{partnerTask.text}</p>
+          <div className="bg-slate-900/50 rounded-xl p-4 border border-pink-500/30">
+            <h3 className="font-bold text-pink-400 mb-2">{partnerName}'s Challenge Was:</h3>
+            <p className="text-gray-200">{partnerTask.text}</p>
           </div>
         </div>
 
-        <div className="text-center space-y-2">
-          <div className="flex items-center justify-center text-green-600">
-            <svg
-              className="w-6 h-6 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-            <span className="font-medium">You've verified!</span>
+        <div className="text-center space-y-3">
+          <div className="flex items-center justify-center text-green-400">
+            <span className="text-2xl mr-2">✅</span>
+            <span className="font-bold">You've verified!</span>
           </div>
           {partnerHasVerified ? (
-            <div className="flex items-center justify-center text-green-600">
-              <svg
-                className="w-6 h-6 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-              <span className="font-medium">{partnerName} has verified!</span>
+            <div className="flex items-center justify-center text-green-400">
+              <span className="text-2xl mr-2">✅</span>
+              <span className="font-bold">{partnerName} has verified!</span>
             </div>
           ) : (
-            <p className="text-gray-600">Waiting for {partnerName} to verify...</p>
+            <div className="flex items-center justify-center text-yellow-400">
+              <span className="text-2xl mr-2 animate-pulse">⏳</span>
+              <span>Waiting for {partnerName}...</span>
+            </div>
           )}
           {partnerHasVerified && (
-            <p className="text-purple-600 font-medium mt-4">
-              ✨ Both verified! The spinner will be available at 11:00 PM tonight.
-            </p>
+            <div className="mt-4 p-4 bg-green-900/30 border border-green-500/30 rounded-xl">
+              <p className="text-green-400 font-bold">
+                🎰 Both verified! Wheel unlocks at 11:00 PM tonight!
+              </p>
+            </div>
           )}
         </div>
       </div>
@@ -125,52 +108,54 @@ export default function VerificationPanel({
   }
 
   return (
-    <div className="card max-w-2xl mx-auto">
+    <div className="card-neon max-w-2xl mx-auto">
       <h2 className="text-2xl font-bold text-center mb-6">
-        Verify Last Week's Tasks
+        <span className="neon-text">⚡ VERIFICATION TIME ⚡</span>
       </h2>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
-          {error}
+        <div className="bg-red-900/50 border border-red-500/50 text-red-300 px-4 py-3 rounded-xl mb-4">
+          ❌ {error}
         </div>
       )}
 
       <div className="space-y-4 mb-6">
-        <div className="card bg-blue-50 border border-blue-200">
-          <h3 className="font-semibold mb-2">Your Task Was:</h3>
-          <p className="text-gray-800">{userTask.text}</p>
+        <div className="bg-slate-900/50 rounded-xl p-4 border border-blue-500/30">
+          <h3 className="font-bold text-blue-400 mb-2">🎯 Your Challenge Was:</h3>
+          <p className="text-gray-200">{userTask.text}</p>
         </div>
 
-        <div className="card bg-purple-50 border border-purple-200">
-          <h3 className="font-semibold mb-2">{partnerName}'s Task Was:</h3>
-          <p className="text-gray-800">{partnerTask.text}</p>
+        <div className="bg-slate-900/50 rounded-xl p-4 border border-pink-500/30">
+          <h3 className="font-bold text-pink-400 mb-2">💕 {partnerName}'s Challenge Was:</h3>
+          <p className="text-gray-200">{partnerTask.text}</p>
         </div>
       </div>
 
       <div className="space-y-4">
         <div>
-          <p className="font-medium mb-3">Did {partnerName} complete their task?</p>
-          <div className="flex space-x-4">
+          <p className="font-bold text-yellow-400 mb-3 text-center text-lg">
+            Did {partnerName} complete their challenge? 🤔
+          </p>
+          <div className="flex gap-4">
             <button
               onClick={() => setPartnerCompleted(true)}
-              className={`flex-1 py-3 px-4 rounded-lg border-2 transition-all ${
+              className={`flex-1 py-4 px-4 rounded-xl border-2 transition-all text-lg font-bold ${
                 partnerCompleted === true
-                  ? 'border-green-500 bg-green-50 text-green-700'
-                  : 'border-gray-300 hover:border-green-300'
+                  ? 'border-green-500 bg-green-900/50 text-green-400 scale-105'
+                  : 'border-gray-700 hover:border-green-500/50 text-gray-300'
               }`}
             >
-              ✓ Yes, they did!
+              ✅ YES!
             </button>
             <button
               onClick={() => setPartnerCompleted(false)}
-              className={`flex-1 py-3 px-4 rounded-lg border-2 transition-all ${
+              className={`flex-1 py-4 px-4 rounded-xl border-2 transition-all text-lg font-bold ${
                 partnerCompleted === false
-                  ? 'border-red-500 bg-red-50 text-red-700'
-                  : 'border-gray-300 hover:border-red-300'
+                  ? 'border-red-500 bg-red-900/50 text-red-400 scale-105'
+                  : 'border-gray-700 hover:border-red-500/50 text-gray-300'
               }`}
             >
-              ✗ No, they didn't
+              ❌ NO
             </button>
           </div>
         </div>
@@ -178,16 +163,15 @@ export default function VerificationPanel({
         <button
           onClick={handleSubmit}
           disabled={partnerCompleted === null || loading}
-          className="btn-primary w-full"
+          className="btn-primary w-full text-lg py-4"
         >
-          {loading ? 'Submitting...' : 'Submit Verification'}
+          {loading ? '⏳ Submitting...' : '🎲 SUBMIT VERIFICATION'}
         </button>
 
         <p className="text-sm text-gray-500 text-center">
-          Be honest! This helps track your progress together.
+          Be honest! This helps track your progress together. 💕
         </p>
       </div>
     </div>
   );
 }
-
