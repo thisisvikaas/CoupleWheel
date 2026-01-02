@@ -28,17 +28,17 @@ export const authService = {
 
       // The trigger will create the user profile automatically
       // Wait a bit for the trigger to complete
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Check if partner exists
-      const { data: partnerData } = await supabase
+      const { data: partnerData, error: partnerError } = await supabase
         .from('users')
         .select('*')
         .eq('email', partnerEmail)
-        .single();
+        .maybeSingle();
 
-      // Link partners if partner exists
-      if (partnerData) {
+      // Link partners if partner exists (ignore error if partner doesn't exist yet)
+      if (partnerData && !partnerError) {
         await supabase.rpc('link_partners', {
           user1_id: authData.user.id,
           user2_id: partnerData.id,
@@ -50,7 +50,7 @@ export const authService = {
         .from('users')
         .select('*')
         .eq('id', authData.user.id)
-        .single();
+        .maybeSingle();
 
       if (userError) throw userError;
 
@@ -82,7 +82,7 @@ export const authService = {
         .from('users')
         .select('*')
         .eq('id', authData.user.id)
-        .single();
+        .maybeSingle();
 
       if (userError) throw userError;
 
@@ -122,7 +122,7 @@ export const authService = {
         .from('users')
         .select('*')
         .eq('id', authUser.id)
-        .single();
+        .maybeSingle();
 
       if (userError) throw userError;
 
@@ -143,7 +143,7 @@ export const authService = {
         .from('users')
         .select('*')
         .eq('id', partnerId)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 
@@ -167,7 +167,7 @@ export const authService = {
         .from('users')
         .select('*')
         .eq('email', partnerEmail)
-        .single();
+        .maybeSingle();
 
       if (partnerError) throw partnerError;
 
