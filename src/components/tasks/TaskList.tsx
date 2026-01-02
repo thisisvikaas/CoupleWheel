@@ -9,8 +9,9 @@ interface TaskListProps {
 export default function TaskList({ tasks, emptyMessage = 'No tasks yet' }: TaskListProps) {
   if (tasks.length === 0) {
     return (
-      <div className="text-center py-12 card">
-        <p className="text-gray-500">{emptyMessage}</p>
+      <div className="card text-center py-12">
+        <div className="text-6xl mb-4">🎲</div>
+        <p className="text-gray-400 text-lg">{emptyMessage}</p>
       </div>
     );
   }
@@ -23,4 +24,3 @@ export default function TaskList({ tasks, emptyMessage = 'No tasks yet' }: TaskL
     </div>
   );
 }
-

@@ -39,20 +39,22 @@ export default function TaskForm() {
     setLoading(false);
   };
 
+  const suggestedCategories = ['Date Night', 'Adventure', 'Creative', 'Home', 'Surprise', 'Romantic'];
+
   return (
-    <form onSubmit={handleSubmit} className="card">
-      <h3 className="text-lg font-semibold mb-4">Add New Task</h3>
+    <form onSubmit={handleSubmit} className="card-neon">
+      <h3 className="text-lg font-bold text-yellow-400 mb-4">🎲 New Challenge</h3>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
-          {error}
+        <div className="bg-red-900/50 border border-red-500/50 text-red-300 px-4 py-3 rounded-xl mb-4 text-sm">
+          ❌ {error}
         </div>
       )}
 
       <div className="space-y-4">
         <div>
-          <label htmlFor="text" className="block text-sm font-medium text-gray-700 mb-1">
-            Task Description <span className="text-red-500">*</span>
+          <label htmlFor="text" className="block text-sm font-bold text-purple-300 mb-2">
+            Challenge Description <span className="text-red-400">*</span>
           </label>
           <textarea
             id="text"
@@ -62,12 +64,12 @@ export default function TaskForm() {
             rows={3}
             required
             disabled={loading}
-            placeholder="E.g., Cook a special dinner together"
+            placeholder="E.g., Plan a surprise picnic date 🧺"
           />
         </div>
 
         <div>
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="category" className="block text-sm font-bold text-purple-300 mb-2">
             Category (Optional)
           </label>
           <input
@@ -77,18 +79,26 @@ export default function TaskForm() {
             onChange={(e) => setCategory(e.target.value)}
             className="input-field"
             disabled={loading}
-            placeholder="E.g., Date Night, Adventure, Creative"
+            placeholder="E.g., Date Night"
           />
-          <p className="text-xs text-gray-500 mt-1">
-            Categories help distribute tasks evenly when spinning
-          </p>
+          <div className="flex flex-wrap gap-1 mt-2">
+            {suggestedCategories.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setCategory(cat)}
+                className="px-2 py-1 text-xs bg-slate-700 text-gray-300 rounded-lg hover:bg-purple-600 hover:text-white transition-colors"
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
 
         <button type="submit" className="btn-primary w-full" disabled={loading}>
-          {loading ? 'Adding...' : 'Add Task'}
+          {loading ? '🎲 Adding...' : '➕ Add Challenge'}
         </button>
       </div>
     </form>
   );
 }
-

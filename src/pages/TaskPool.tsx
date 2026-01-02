@@ -6,7 +6,7 @@ import TaskForm from '@/components/tasks/TaskForm';
 import TaskList from '@/components/tasks/TaskList';
 
 export default function TaskPool() {
-  const { user } = useAuthStore();
+  const { user, partner } = useAuthStore();
   const { tasks, setTasks, loading, setLoading } = useTaskStore();
   const [filter, setFilter] = useState<'all' | 'available' | 'completed'>('all');
 
@@ -38,83 +38,104 @@ export default function TaskPool() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+      <div className="flex flex-col items-center justify-center py-20">
+        <div className="relative">
+          <div className="w-20 h-20 border-4 border-yellow-500/30 rounded-full"></div>
+          <div className="w-20 h-20 border-4 border-t-yellow-400 rounded-full animate-spin absolute top-0 left-0"></div>
+        </div>
+        <p className="mt-6 text-yellow-400 font-bold text-lg animate-pulse">Loading Tasks...</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Task Pool</h1>
-        <p className="text-gray-600">
-          Create tasks for your partner to complete. They'll randomly spin one each week!
+    <div className="max-w-5xl mx-auto">
+      <div className="mb-8 text-center">
+        <h1 className="text-4xl font-black mb-2">
+          <span className="neon-text">📝 TASK POOL 📝</span>
+        </h1>
+        <p className="text-purple-300">
+          Create challenges for <span className="text-pink-400 font-bold">{partner?.name || 'your partner'}</span>
         </p>
+        
         {availableCount < 20 && (
-          <div className="mt-4 bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-lg">
+          <div className="mt-4 card-gold inline-block px-6 py-3">
             <p className="text-sm">
-              💡 <strong>Tip:</strong> Create at least 20 tasks to ensure variety. You currently have{' '}
-              <strong>{availableCount}</strong> available tasks.
+              💡 <span className="text-yellow-400 font-bold">{availableCount}/20</span> tasks ready
+              <span className="text-gray-400 ml-2">- Add {20 - availableCount} more for variety!</span>
             </p>
           </div>
         )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 space-y-4">
           <TaskForm />
 
-          <div className="card mt-4">
-            <h3 className="text-sm font-semibold text-gray-700 mb-2">Statistics</h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Total Tasks:</span>
-                <span className="font-medium">{tasks.length}</span>
+          <div className="card">
+            <h3 className="text-lg font-bold text-yellow-400 mb-4">📊 Stats</h3>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-400">Total Tasks</span>
+                <span className="slot-number text-2xl">{tasks.length}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Available:</span>
-                <span className="font-medium text-green-600">{availableCount}</span>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-400">Available</span>
+                <span className="text-green-400 font-bold text-xl">{availableCount}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Completed:</span>
-                <span className="font-medium text-gray-600">{completedCount}</span>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-400">Completed</span>
+                <span className="text-purple-400 font-bold text-xl">{completedCount}</span>
+              </div>
+            </div>
+
+            {/* Progress bar */}
+            <div className="mt-4">
+              <div className="flex justify-between text-xs text-gray-500 mb-1">
+                <span>Progress to 20</span>
+                <span>{Math.min(100, (availableCount / 20) * 100).toFixed(0)}%</span>
+              </div>
+              <div className="h-3 bg-slate-700 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-yellow-500 to-amber-400 transition-all duration-500"
+                  style={{ width: `${Math.min(100, (availableCount / 20) * 100)}%` }}
+                ></div>
               </div>
             </div>
           </div>
         </div>
 
         <div className="lg:col-span-2">
-          <div className="mb-4 flex space-x-2">
+          <div className="mb-4 flex flex-wrap gap-2">
             <button
               onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium ${
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
                 filter === 'all'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'bg-gradient-to-r from-yellow-500 to-amber-500 text-black'
+                  : 'bg-slate-800 text-gray-300 hover:bg-slate-700'
               }`}
             >
-              All ({tasks.length})
+              🎯 All ({tasks.length})
             </button>
             <button
               onClick={() => setFilter('available')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium ${
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
                 filter === 'available'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-black'
+                  : 'bg-slate-800 text-gray-300 hover:bg-slate-700'
               }`}
             >
-              Available ({availableCount})
+              ✅ Available ({availableCount})
             </button>
             <button
               onClick={() => setFilter('completed')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium ${
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${
                 filter === 'completed'
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+                  : 'bg-slate-800 text-gray-300 hover:bg-slate-700'
               }`}
             >
-              Completed ({completedCount})
+              🏆 Completed ({completedCount})
             </button>
           </div>
 
@@ -122,7 +143,7 @@ export default function TaskPool() {
             tasks={filteredTasks}
             emptyMessage={
               filter === 'all'
-                ? 'No tasks yet. Add your first task above!'
+                ? 'No tasks yet. Create your first challenge! 🎲'
                 : `No ${filter} tasks.`
             }
           />
@@ -131,4 +152,3 @@ export default function TaskPool() {
     </div>
   );
 }
-

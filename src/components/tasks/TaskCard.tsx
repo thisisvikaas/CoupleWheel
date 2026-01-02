@@ -30,7 +30,7 @@ export default function TaskCard({ task }: TaskCardProps) {
   };
 
   const handleDelete = async () => {
-    if (!confirm('Are you sure you want to delete this task?')) return;
+    if (!confirm('🗑️ Delete this challenge?')) return;
 
     setLoading(true);
     const { error } = await taskService.deleteTask(task.id);
@@ -49,7 +49,7 @@ export default function TaskCard({ task }: TaskCardProps) {
 
   if (isEditing) {
     return (
-      <div className="card">
+      <div className="card-neon">
         <div className="space-y-3">
           <textarea
             value={editText}
@@ -66,20 +66,20 @@ export default function TaskCard({ task }: TaskCardProps) {
             placeholder="Category (optional)"
             disabled={loading}
           />
-          <div className="flex space-x-2">
+          <div className="flex gap-2">
             <button
               onClick={handleUpdate}
               className="btn-primary flex-1"
               disabled={loading || !editText.trim()}
             >
-              Save
+              💾 Save
             </button>
             <button
               onClick={handleCancel}
               className="btn-secondary flex-1"
               disabled={loading}
             >
-              Cancel
+              ❌ Cancel
             </button>
           </div>
         </div>
@@ -88,43 +88,42 @@ export default function TaskCard({ task }: TaskCardProps) {
   }
 
   return (
-    <div className="card hover:shadow-lg transition-shadow">
+    <div className="card hover:border-yellow-500/50 transition-all group">
       <div className="flex justify-between items-start">
         <div className="flex-1">
-          <p className="text-gray-800 mb-2">{task.text}</p>
-          <div className="flex items-center space-x-2">
+          <p className="text-gray-200 mb-3">{task.text}</p>
+          <div className="flex items-center gap-2">
             <CategoryTag category={task.category} />
             <span
-              className={`text-xs px-2 py-1 rounded ${
+              className={`text-xs px-2 py-1 rounded-lg font-bold ${
                 task.status === 'available'
-                  ? 'bg-green-100 text-green-700'
+                  ? 'bg-green-900/50 text-green-400 border border-green-500/30'
                   : task.status === 'completed'
-                  ? 'bg-gray-100 text-gray-700'
-                  : 'bg-yellow-100 text-yellow-700'
+                  ? 'bg-purple-900/50 text-purple-400 border border-purple-500/30'
+                  : 'bg-yellow-900/50 text-yellow-400 border border-yellow-500/30'
               }`}
             >
-              {task.status}
+              {task.status === 'available' ? '✅ Ready' : task.status === 'completed' ? '🏆 Done' : '⏳ Active'}
             </span>
           </div>
         </div>
-        <div className="flex space-x-2 ml-4">
+        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             onClick={() => setIsEditing(true)}
-            className="text-blue-600 hover:text-blue-700 text-sm"
+            className="px-3 py-1 text-sm bg-blue-600/30 text-blue-400 rounded-lg hover:bg-blue-600/50 transition-colors"
             disabled={loading}
           >
-            Edit
+            ✏️
           </button>
           <button
             onClick={handleDelete}
-            className="text-red-600 hover:text-red-700 text-sm"
+            className="px-3 py-1 text-sm bg-red-600/30 text-red-400 rounded-lg hover:bg-red-600/50 transition-colors"
             disabled={loading}
           >
-            Delete
+            🗑️
           </button>
         </div>
       </div>
     </div>
   );
 }
-
