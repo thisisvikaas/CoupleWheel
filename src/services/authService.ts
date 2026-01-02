@@ -19,16 +19,29 @@ export const authService = {
         options: {
           data: {
             name,
+            partner_email: partnerEmail,
           },
+          emailRedirectTo: `${window.location.origin}/email-confirmed`,
         },
       });
+
+      console.log('Signup response:', { authData, authError });
 
       if (authError) throw authError;
       if (!authData.user) throw new Error('User creation failed');
 
       // Check if email confirmation is required
-      // If user is not confirmed and session is null, they need to confirm email
-      if (!authData.session && authData.user.email_confirmed_at === null) {
+      // Supabase returns no session when email confirmation is enabled
+      // Also check if email_confirmed_at is null/undefined
+      const needsConfirmation = !authData.session || 
+        !authData.user.email_confirmed_at;
+
+      console.log('Needs email confirmation:', needsConfirmation, {
+        hasSession: !!authData.session,
+        emailConfirmedAt: authData.user.email_confirmed_at
+      });
+
+      if (needsConfirmation) {
         return { 
           user: null, 
           error: null, 
@@ -66,6 +79,7 @@ export const authService = {
 
       return { user: userData, error: null };
     } catch (error) {
+      console.error('Signup error:', error);
       return { user: null, error: error as Error };
     }
   },

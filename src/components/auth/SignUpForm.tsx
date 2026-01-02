@@ -44,32 +44,46 @@ export default function SignUpForm() {
 
     setLoading(true);
 
-    const { user, error: signUpError, needsEmailConfirmation } = await authService.signUp(
-      name,
-      email,
-      password,
-      partnerEmail
-    );
+    try {
+      console.log('Starting signup...');
+      const result = await authService.signUp(
+        name,
+        email,
+        password,
+        partnerEmail
+      );
 
-    if (signUpError) {
-      setError(signUpError.message);
+      console.log('Signup result:', result);
+
+      const { user, error: signUpError, needsEmailConfirmation } = result;
+
+      if (signUpError) {
+        console.error('Signup error:', signUpError);
+        setError(signUpError.message);
+        setLoading(false);
+        return;
+      }
+
+      // If no user returned and no error, email confirmation is needed
+      // Or if explicitly flagged
+      if (needsEmailConfirmation || !user) {
+        console.log('Email confirmation needed, showing confirmation screen');
+        setEmailSent(true);
+        setLoading(false);
+        return;
+      }
+
+      if (user) {
+        console.log('User created, navigating to dashboard');
+        setUser(user);
+        navigate('/');
+      }
+    } catch (err) {
+      console.error('Unexpected error during signup:', err);
+      setError((err as Error).message || 'An unexpected error occurred');
+    } finally {
       setLoading(false);
-      return;
     }
-
-    // Check if email confirmation is required
-    if (needsEmailConfirmation) {
-      setEmailSent(true);
-      setLoading(false);
-      return;
-    }
-
-    if (user) {
-      setUser(user);
-      navigate('/');
-    }
-
-    setLoading(false);
   };
 
   // Show email confirmation screen
