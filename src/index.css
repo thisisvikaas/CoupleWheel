@@ -1,9 +1,9 @@
+/* Casino Game Theme */
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Casino Game Theme */
-@import url('https://fonts.googleapis.com/css2?family=Russo+One&family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap');
 
 @layer base {
   body {
