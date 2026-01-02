@@ -54,7 +54,7 @@ export default function SignUpForm() {
     // Check if email confirmation is required
     if (needsEmailConfirmation) {
       setSuccess(
-        `✅ Account created! Please check your email (${email}) for a confirmation link. After confirming, you can log in.`
+        `🎉 Account created! Check your email (${email}) for a confirmation link. After confirming, come back and log in!`
       );
       setLoading(false);
       return;
@@ -69,32 +69,33 @@ export default function SignUpForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 to-pink-500 py-8">
+    <div className="min-h-screen flex items-center justify-center stars-bg py-8">
       <div className="max-w-md w-full mx-4">
-        <div className="card">
+        <div className="card-gold">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              💑 Couples Challenge Wheel
+            <div className="text-6xl mb-4 animate-float">🎲</div>
+            <h1 className="text-3xl font-black mb-2">
+              <span className="neon-text">JOIN THE GAME</span>
             </h1>
-            <p className="text-gray-600">Create your account to get started</p>
+            <p className="text-gray-400">Create your player account</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                {error}
+              <div className="bg-red-900/50 border border-red-500/50 text-red-300 px-4 py-3 rounded-xl text-sm">
+                ❌ {error}
               </div>
             )}
 
             {success && (
-              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
+              <div className="bg-green-900/50 border border-green-500/50 text-green-300 px-4 py-3 rounded-xl text-sm">
                 {success}
               </div>
             )}
 
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                Your Name
+              <label htmlFor="name" className="block text-sm font-bold text-yellow-400 mb-2">
+                🎭 Your Name
               </label>
               <input
                 id="name"
@@ -104,12 +105,13 @@ export default function SignUpForm() {
                 className="input-field"
                 required
                 disabled={loading}
+                placeholder="Enter your name"
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Your Email
+              <label htmlFor="email" className="block text-sm font-bold text-yellow-400 mb-2">
+                📧 Your Email
               </label>
               <input
                 id="email"
@@ -119,12 +121,13 @@ export default function SignUpForm() {
                 className="input-field"
                 required
                 disabled={loading}
+                placeholder="your@email.com"
               />
             </div>
 
             <div>
-              <label htmlFor="partnerEmail" className="block text-sm font-medium text-gray-700 mb-1">
-                Partner's Email
+              <label htmlFor="partnerEmail" className="block text-sm font-bold text-pink-400 mb-2">
+                💕 Partner's Email
               </label>
               <input
                 id="partnerEmail"
@@ -134,16 +137,16 @@ export default function SignUpForm() {
                 className="input-field"
                 required
                 disabled={loading}
-                placeholder="your.partner@example.com"
+                placeholder="partner@email.com"
               />
               <p className="text-xs text-gray-500 mt-1">
-                You'll be automatically linked if they've already signed up
+                Auto-linked when they sign up
               </p>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Password
+              <label htmlFor="password" className="block text-sm font-bold text-yellow-400 mb-2">
+                🔐 Password
               </label>
               <input
                 id="password"
@@ -154,12 +157,13 @@ export default function SignUpForm() {
                 required
                 disabled={loading}
                 minLength={6}
+                placeholder="••••••••"
               />
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                Confirm Password
+              <label htmlFor="confirmPassword" className="block text-sm font-bold text-yellow-400 mb-2">
+                🔐 Confirm Password
               </label>
               <input
                 id="confirmPassword"
@@ -169,23 +173,24 @@ export default function SignUpForm() {
                 className="input-field"
                 required
                 disabled={loading}
+                placeholder="••••••••"
               />
             </div>
 
             <button
               type="submit"
-              className="w-full btn-primary"
+              className="w-full btn-primary text-lg py-4"
               disabled={loading}
             >
-              {loading ? 'Creating account...' : 'Sign Up'}
+              {loading ? '🎲 Creating...' : '🎰 CREATE ACCOUNT'}
             </button>
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Already have an account?{' '}
-              <Link to="/login" className="text-purple-600 hover:text-purple-700 font-medium">
-                Log in
+            <p className="text-gray-400">
+              Already playing?{' '}
+              <Link to="/login" className="text-yellow-400 hover:text-yellow-300 font-bold">
+                Log In 🎯
               </Link>
             </p>
           </div>
@@ -194,4 +199,3 @@ export default function SignUpForm() {
     </div>
   );
 }
-

@@ -19,8 +19,14 @@ export default function Dashboard() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (user && partner) {
-      checkSundayState();
+    // Don't wait for partner - show dashboard anyway
+    if (user) {
+      if (partner) {
+        checkSundayState();
+      } else {
+        // No partner linked - just stop loading
+        setLoading(false);
+      }
     }
   }, [user, partner]);
 
@@ -122,8 +128,6 @@ export default function Dashboard() {
         await spinService.updateSpinWithTask(existingSpin.id, user.id, task.id, isUserA);
       } else {
         // Create new spin (both users spinning)
-        // For now, just create with partner's task ID as placeholder
-        // They will update when they spin
         await spinService.createWeeklySpin(user.id, partner.id, task.id, task.id);
       }
 
@@ -136,10 +140,14 @@ export default function Dashboard() {
     }
   };
 
-  if (loading && !sundayState) {
+  if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+      <div className="flex flex-col items-center justify-center py-20">
+        <div className="relative">
+          <div className="w-20 h-20 border-4 border-yellow-500/30 rounded-full"></div>
+          <div className="w-20 h-20 border-4 border-t-yellow-400 rounded-full animate-spin absolute top-0 left-0"></div>
+        </div>
+        <p className="mt-6 text-yellow-400 font-bold text-lg animate-pulse">Loading Casino...</p>
       </div>
     );
   }
@@ -147,11 +155,63 @@ export default function Dashboard() {
   if (error) {
     return (
       <div className="max-w-2xl mx-auto">
-        <div className="card bg-red-50 border border-red-200">
-          <p className="text-red-700">{error}</p>
-          <button onClick={checkSundayState} className="btn-primary mt-4">
-            Retry
+        <div className="card-neon">
+          <p className="text-red-400 text-center">{error}</p>
+          <button onClick={checkSundayState} className="btn-primary mt-4 mx-auto block">
+            Try Again
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  // No partner linked - show warning
+  if (!partner) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-black mb-4">
+            <span className="neon-text">🎰 COUPLES CASINO 🎰</span>
+          </h1>
+          <p className="text-xl text-purple-300">
+            Welcome, <span className="text-yellow-400 font-bold">{user?.name}</span>! 
+          </p>
+        </div>
+
+        <div className="card-gold text-center animate-pulse-glow">
+          <div className="text-6xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-yellow-400 glow-gold mb-4">
+            Partner Not Linked Yet!
+          </h2>
+          <p className="text-gray-300 mb-6">
+            Your partner needs to sign up using your email address to link your accounts.
+            <br />Once linked, you can start playing the challenge wheel together!
+          </p>
+          <div className="bg-slate-800/50 rounded-xl p-4 mb-6">
+            <p className="text-sm text-gray-400 mb-2">Share this with your partner:</p>
+            <p className="text-yellow-400 font-mono">{user?.email}</p>
+          </div>
+          <Link to="/tasks" className="btn-primary inline-block">
+            🎯 Create Tasks While You Wait
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+          <Link to="/tasks" className="card-neon hover:scale-105 transition-transform block">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-xl font-bold text-yellow-400">🎯 Task Pool</h3>
+              <span className="text-4xl">📝</span>
+            </div>
+            <p className="text-gray-400">Create challenges for your partner</p>
+          </Link>
+
+          <div className="card opacity-50">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-xl font-bold text-gray-500">🔒 Current Week</h3>
+              <span className="text-4xl">🎡</span>
+            </div>
+            <p className="text-gray-600">Link your partner to unlock</p>
+          </div>
         </div>
       </div>
     );
@@ -161,46 +221,59 @@ export default function Dashboard() {
   if (!sundayState) {
     return (
       <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome, {user?.name}! 💑
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-black mb-4">
+            <span className="neon-text">🎰 COUPLES CASINO 🎰</span>
           </h1>
-          <p className="text-gray-600">
-            {partner
-              ? `You're paired with ${partner.name}`
-              : 'Set up your partner to get started'}
+          <p className="text-xl text-purple-300">
+            Welcome back, <span className="text-yellow-400 font-bold">{user?.name}</span>! 
+          </p>
+          <p className="text-purple-400">
+            Playing with <span className="text-pink-400 font-bold">{partner?.name}</span> 💕
           </p>
         </div>
 
         <CountdownTimer />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-          <Link to="/current" className="card hover:shadow-lg transition-shadow">
+          <Link to="/current" className="card-neon hover:scale-105 transition-transform group block">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-xl font-semibold">Current Week</h3>
-              <span className="text-3xl">📋</span>
+              <h3 className="text-xl font-bold text-yellow-400 group-hover:glow-gold">🎯 Current Challenge</h3>
+              <span className="text-4xl animate-float">🎪</span>
             </div>
-            <p className="text-gray-600">View your active task assignment</p>
+            <p className="text-gray-400">View your active mission</p>
           </Link>
 
-          <Link to="/tasks" className="card hover:shadow-lg transition-shadow">
+          <Link to="/tasks" className="card-neon hover:scale-105 transition-transform group block">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-xl font-semibold">Task Pool</h3>
-              <span className="text-3xl">📝</span>
+              <h3 className="text-xl font-bold text-pink-400 group-hover:glow-purple">📝 Task Pool</h3>
+              <span className="text-4xl animate-float" style={{animationDelay: '0.5s'}}>🎲</span>
             </div>
-            <p className="text-gray-600">Manage tasks for your partner</p>
+            <p className="text-gray-400">Create challenges for {partner?.name}</p>
           </Link>
         </div>
 
-        {!partner && (
-          <div className="card bg-yellow-50 border border-yellow-300 mt-8">
-            <h3 className="font-semibold mb-2">⚠️ No Partner Linked</h3>
-            <p className="text-sm text-gray-700">
-              You need to link with your partner to use the app. Make sure they sign up
-              using your email, or contact support.
-            </p>
+        <div className="card mt-8 text-center">
+          <h3 className="text-lg font-bold text-yellow-400 mb-4">🎰 How To Play</h3>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+            <div className="bg-slate-800/50 rounded-xl p-4">
+              <div className="text-3xl mb-2">📝</div>
+              <p className="text-gray-300">Create fun challenges</p>
+            </div>
+            <div className="bg-slate-800/50 rounded-xl p-4">
+              <div className="text-3xl mb-2">🎡</div>
+              <p className="text-gray-300">Spin Sunday @ 11PM</p>
+            </div>
+            <div className="bg-slate-800/50 rounded-xl p-4">
+              <div className="text-3xl mb-2">✅</div>
+              <p className="text-gray-300">Complete your task</p>
+            </div>
+            <div className="bg-slate-800/50 rounded-xl p-4">
+              <div className="text-3xl mb-2">🏆</div>
+              <p className="text-gray-300">Verify & celebrate!</p>
+            </div>
           </div>
-        )}
+        </div>
       </div>
     );
   }
@@ -215,12 +288,11 @@ export default function Dashboard() {
 
     return (
       <div className="max-w-4xl mx-auto">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Sunday Verification</h1>
-          <p className="text-gray-600">Verify last week's tasks before spinning tonight!</p>
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-black neon-text mb-2">⚡ VERIFICATION TIME ⚡</h1>
+          <p className="text-purple-300">Did your partner complete their challenge?</p>
         </div>
 
-        {/* We need to fetch the actual tasks */}
         <VerificationFetcher
           myTaskId={myTaskId}
           partnerTaskId={partnerTaskId}
@@ -237,12 +309,13 @@ export default function Dashboard() {
   if (sundayState === SundayState.VERIFICATION_COMPLETE) {
     return (
       <div className="max-w-2xl mx-auto">
-        <div className="card text-center">
-          <div className="text-6xl mb-4">✅</div>
-          <h2 className="text-2xl font-bold mb-2">All Set!</h2>
-          <p className="text-gray-600 mb-4">
-            Both of you have verified last week's tasks. The spinner will be available at
-            11:00 PM tonight!
+        <div className="card-gold text-center animate-pulse-glow">
+          <div className="text-6xl mb-4 animate-float">✅</div>
+          <h2 className="text-2xl font-bold text-yellow-400 glow-gold mb-4">
+            All Verified!
+          </h2>
+          <p className="text-gray-300 mb-6">
+            The wheel unlocks at <span className="text-yellow-400 font-bold">11:00 PM</span> tonight!
           </p>
           <CountdownTimer />
         </div>
@@ -254,11 +327,11 @@ export default function Dashboard() {
   if (sundayState === SundayState.READY_TO_SPIN) {
     return (
       <div className="max-w-4xl mx-auto">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Time to Spin! 🎡
+        <div className="text-center mb-8">
+          <h1 className="text-5xl font-black mb-4">
+            <span className="neon-text animate-pulse">🎰 SPIN TIME! 🎰</span>
           </h1>
-          <p className="text-gray-600">Reveal 6 random tasks and spin the wheel</p>
+          <p className="text-xl text-purple-300">Your fate awaits...</p>
         </div>
 
         <SpinnerWheel
@@ -276,14 +349,16 @@ export default function Dashboard() {
   if (sundayState === SundayState.SPIN_COMPLETE) {
     return (
       <div className="max-w-2xl mx-auto">
-        <div className="card text-center">
+        <div className="card-gold text-center">
           <div className="text-6xl mb-4">🎉</div>
-          <h2 className="text-2xl font-bold mb-2">Spin Complete!</h2>
-          <p className="text-gray-600 mb-6">
-            You've spun the wheel for this week. Check out your new task!
+          <h2 className="text-3xl font-bold text-yellow-400 glow-gold mb-4">
+            JACKPOT!
+          </h2>
+          <p className="text-gray-300 mb-6">
+            Your challenge has been set! Time to make it happen.
           </p>
           <Link to="/current" className="btn-primary inline-block">
-            View This Week's Task
+            🎯 View Your Challenge
           </Link>
         </div>
       </div>
@@ -335,7 +410,7 @@ function VerificationFetcher({
   if (loading || !tasks.myTask || !tasks.partnerTask) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+        <div className="w-16 h-16 border-4 border-t-yellow-400 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -351,4 +426,3 @@ function VerificationFetcher({
     />
   );
 }
-

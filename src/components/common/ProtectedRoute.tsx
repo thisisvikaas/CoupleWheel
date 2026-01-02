@@ -7,8 +7,15 @@ export default function ProtectedRoute() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+      <div className="min-h-screen flex flex-col items-center justify-center stars-bg">
+        <div className="relative">
+          <div className="w-24 h-24 border-4 border-yellow-500/30 rounded-full"></div>
+          <div className="w-24 h-24 border-4 border-t-yellow-400 rounded-full animate-spin absolute top-0 left-0"></div>
+        </div>
+        <p className="mt-6 text-2xl font-bold text-yellow-400 glow-gold animate-pulse">
+          Loading Casino...
+        </p>
+        <p className="mt-2 text-purple-400">Preparing your experience</p>
       </div>
     );
   }
@@ -18,7 +25,7 @@ export default function ProtectedRoute() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       <Navbar />
       <main className="container mx-auto px-4 py-8">
         <Outlet />
@@ -26,4 +33,3 @@ export default function ProtectedRoute() {
     </div>
   );
 }
-
