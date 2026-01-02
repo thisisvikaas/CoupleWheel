@@ -9,6 +9,7 @@ import SignUpForm from './components/auth/SignUpForm';
 import Dashboard from './pages/Dashboard';
 import TaskPool from './pages/TaskPool';
 import CurrentWeek from './pages/CurrentWeek';
+import EmailConfirmed from './pages/EmailConfirmed';
 import ProtectedRoute from './components/common/ProtectedRoute';
 
 function App() {
@@ -80,6 +81,7 @@ function App() {
     <Routes>
       <Route path="/login" element={<LoginForm />} />
       <Route path="/signup" element={<SignUpForm />} />
+      <Route path="/email-confirmed" element={<EmailConfirmed />} />
       <Route path="/" element={<ProtectedRoute />}>
         <Route index element={<Dashboard />} />
         <Route path="tasks" element={<TaskPool />} />
