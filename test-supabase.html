@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supabase Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>Supabase Connection Test</h1>
+    <div id="result"></div>
+    <form id="signupForm">
+        <input type="text" id="name" placeholder="Name" required><br>
+        <input type="email" id="email" placeholder="Email" required><br>
+        <input type="email" id="partnerEmail" placeholder="Partner Email" required><br>
+        <input type="password" id="password" placeholder="Password" required><br>
+        <button type="submit">Sign Up</button>
+    </form>
+    <div id="output"></div>
+    
+    <script>
+        const supabaseUrl = 'https://qzbxloaijpcdmrenkbtr.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6Ynhsb2FpanBjZG1yZW5rYnRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjczNTkyODEsImV4cCI6MjA4MjkzNTI4MX0.jFOC18unZGRRXqYJy_ABwXW_YB5F_7uzftTvKdLdJ2w';
+        
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        document.getElementById('result').innerHTML = 'Supabase client created successfully!';
+        
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const output = document.getElementById('output');
+            output.innerHTML = 'Processing...';
+            
+            try {
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const partnerEmail = document.getElementById('partnerEmail').value;
+                const password = document.getElementById('password').value;
+                
+                // Step 1: Sign up
+                console.log('Step 1: Signing up...');
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: { name }
+                    }
+                });
+                
+                if (authError) {
+                    output.innerHTML = 'Auth Error: ' + authError.message;
+                    console.error('Auth error:', authError);
+                    return;
+                }
+                
+                console.log('Auth successful:', authData);
+                output.innerHTML = 'Auth successful! User ID: ' + authData.user.id + '<br>';
+                
+                // Step 2: Wait for trigger
+                console.log('Step 2: Waiting for trigger...');
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Step 3: Check if user profile was created
+                console.log('Step 3: Checking user profile...');
+                const { data: userData, error: userError } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('id', authData.user.id)
+                    .maybeSingle();
+                
+                if (userError) {
+                    output.innerHTML += 'User Error: ' + userError.message + '<br>';
+                    console.error('User error:', userError);
+                    return;
+                }
+                
+                if (!userData) {
+                    output.innerHTML += 'WARNING: User profile not created by trigger!<br>';
+                    console.log('User profile missing, creating manually...');
+                    
+                    // Create manually
+                    const { data: newUser, error: createError } = await supabase
+                        .from('users')
+                        .insert({
+                            id: authData.user.id,
+                            name: name,
+                            email: email
+                        })
+                        .select()
+                        .single();
+                    
+                    if (createError) {
+                        output.innerHTML += 'Create Error: ' + createError.message + '<br>';
+                        console.error('Create error:', createError);
+                        return;
+                    }
+                    
+                    output.innerHTML += 'User profile created manually!<br>';
+                    console.log('Manual user:', newUser);
+                } else {
+                    output.innerHTML += 'User profile found: ' + JSON.stringify(userData) + '<br>';
+                    console.log('User profile:', userData);
+                }
+                
+                output.innerHTML += '<br>SUCCESS! Check console for details.';
+                
+            } catch (err) {
+                output.innerHTML = 'Exception: ' + err.message;
+                console.error('Exception:', err);
+            }
+        });
+    </script>
+</body>
+</html>

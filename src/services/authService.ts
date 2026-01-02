@@ -10,7 +10,7 @@ export const authService = {
     email: string,
     password: string,
     partnerEmail: string
-  ): Promise<{ user: User | null; error: Error | null }> {
+  ): Promise<{ user: User | null; error: Error | null; needsEmailConfirmation?: boolean }> {
     try {
       // Create auth user
       const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -25,6 +25,16 @@ export const authService = {
 
       if (authError) throw authError;
       if (!authData.user) throw new Error('User creation failed');
+
+      // Check if email confirmation is required
+      // If user is not confirmed and session is null, they need to confirm email
+      if (!authData.session && authData.user.email_confirmed_at === null) {
+        return { 
+          user: null, 
+          error: null, 
+          needsEmailConfirmation: true 
+        };
+      }
 
       // The trigger will create the user profile automatically
       // Wait a bit for the trigger to complete

@@ -11,12 +11,14 @@ export default function SignUpForm() {
   const [partnerEmail, setPartnerEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState('');
   const navigate = useNavigate();
   const { setUser } = useAuthStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
 
     // Validation
     if (password !== confirmPassword) {
@@ -36,7 +38,7 @@ export default function SignUpForm() {
 
     setLoading(true);
 
-    const { user, error: signUpError } = await authService.signUp(
+    const { user, error: signUpError, needsEmailConfirmation } = await authService.signUp(
       name,
       email,
       password,
@@ -45,6 +47,15 @@ export default function SignUpForm() {
 
     if (signUpError) {
       setError(signUpError.message);
+      setLoading(false);
+      return;
+    }
+
+    // Check if email confirmation is required
+    if (needsEmailConfirmation) {
+      setSuccess(
+        `✅ Account created! Please check your email (${email}) for a confirmation link. After confirming, you can log in.`
+      );
       setLoading(false);
       return;
     }
@@ -72,6 +83,12 @@ export default function SignUpForm() {
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
                 {error}
+              </div>
+            )}
+
+            {success && (
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
+                {success}
               </div>
             )}
 
